@@ -43,7 +43,6 @@ export default {
     },
     data() {
         return {
-            message: '',
             isAction: false,
             isAnimateIng: false,
             startValue: 0,
@@ -61,7 +60,6 @@ export default {
 
             childLength: 0,
             slideWraper: null,
-            childrenElement: [],
         };
     },
 
@@ -88,7 +86,6 @@ export default {
             const bound = this.$el.getBoundingClientRect();
             this.containerWidth = bound.width;
             this.containerHeight = bound.height;
-            this.childrenElement = this.slideWraper.children;
 
             if (this.isHorizontal) {
                 this.maxDistance = (this.childLength - 1) * this.containerWidth;
