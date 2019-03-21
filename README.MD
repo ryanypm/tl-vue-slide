@@ -45,6 +45,11 @@ export default {
 ## 事件
 `slide` 返回当前索引
 
+## 调试
+```html
+npm run dev
+```
+
 ## 版本
 - __Version 1.0.0__ 第一次发布
 
