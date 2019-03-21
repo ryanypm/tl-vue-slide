@@ -1,0 +1,45 @@
+{
+  "name": "tl-vue-slide",
+  "version": "1.0.0",
+  "description": "vue carousel component",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --progress --open --color --config ./webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+	"preversion": "npm run build",
+    "postversion": "git push origin master && git push origin --tags && npm publish",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanypm/tl-vue-slide.git"
+  },
+  "keywords": [
+    "tl-vue-slide"
+  ],
+  "author": "ryan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanypm/tl-vue-slide/issues"
+  },
+  "homepage": "https://github.com/ryanypm/tl-vue-slide#readme",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "auto-prefixer": "^0.4.2",
+    "autoprefixer": "^9.4.10",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.5",
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.1",
+    "html-loader": "^0.5.5",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.8",
+    "webpack": "^4.29.6",
+    "webpack-bundle-analyzer": "^3.1.0",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  }
+}
