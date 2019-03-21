@@ -5,7 +5,7 @@
 
 ## 安装
 ```html
-npm install tl-vue-slide --save-dev
+npm install tl-vue-slide --save
 ```
 
 ## 使用
