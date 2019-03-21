@@ -1,6 +1,6 @@
 {
   "name": "tl-vue-slide",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "vue carousel component",
   "main": "dist/bundle.js",
   "scripts": {
