@@ -34,6 +34,17 @@ export default {
 </script>
 ```
 
+## 参数
+```html
+`loop:(Boolean)` 无缝切换(默认: false)
+
+`direction:(String)` 滚动方向(可选值:horizontal/vertical, 默认: horizontal)
+
+`autoplay:(Number)` 自动播放(默认: 0)
+
+`disableTouch:(Boolean)` 是否禁用滑动(默认: false)
+```
+
 ## Api
 `this.$refs.slider.next()` 切换到下一张
 
@@ -49,7 +60,3 @@ export default {
 ```html
 npm run dev
 ```
-
-## 版本
-- __Version 1.0.0__ 第一次发布
-
