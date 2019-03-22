@@ -1,7 +1,7 @@
 <template>
     <div class="tl-slide-container" ref="slide" @mouseleave="swipeOut">
         <div class="tl-slide-touch"
-            @touchstart.prevent="onSwipeStart"
+            @touchstart="onSwipeStart"
             @touchmove="onSwipeMove"
             @touchend="onSwipeEnd"
             @mousedown="onSwipeStart"
