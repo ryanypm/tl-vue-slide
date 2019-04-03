@@ -63,6 +63,7 @@ export default {
 
             childLength: 0,
             slideWraper: null,
+			argsValueResetCount: 10,
         };
     },
 
@@ -90,8 +91,9 @@ export default {
             this.containerWidth = bound.width;
             this.containerHeight = bound.height;
 
-            if (this.containerWidth === 0 || this.containerHeight === 0) {
+            if (this.containerWidth === 0 || this.containerHeight === 0 && this.argsValueResetCount > 0) {
                 setTimeout(() => {
+					this.argsValueResetCount--;
                     this.setArgsValue();
                 }, 100);
             }
