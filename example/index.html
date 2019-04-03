@@ -13,6 +13,9 @@
 			width: 100%;
 			height: 200px;
 		}
+		.item {
+			background-color: red;
+		}
     </style>
 </head>
 
@@ -20,7 +23,7 @@
 	<div id="app">
 		<div class="slide">
 			<tl-slide>
-				<tl-slide-item :key="item" v-for="item in data">
+				<tl-slide-item class="item" :key="item" v-for="item in data">
 					{{item}}
 				</tl-slide-item>
 			</tl-slide>

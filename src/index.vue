@@ -40,6 +40,10 @@ export default {
             type: Boolean,
             default: false,
         },
+		threshold: {
+			type: Number,
+			default: 0.1,
+		},
     },
     data() {
         return {
@@ -52,7 +56,6 @@ export default {
             containerWidth: 0,
             containerHeight: 0,
 
-            threshold: 0.2,
             maxDistance: 0,
             thresholdDistance: 0,
             currentNow: 0,
@@ -82,10 +85,16 @@ export default {
                 this.setConfig();
             }
         },
-        setConfig() {
+        setArgsValue() {
             const bound = this.$el.getBoundingClientRect();
             this.containerWidth = bound.width;
             this.containerHeight = bound.height;
+
+            if (this.containerWidth === 0 || this.containerHeight === 0) {
+                setTimeout(() => {
+                    this.setArgsValue();
+                }, 100);
+            }
 
             if (this.isHorizontal) {
                 this.maxDistance = (this.childLength - 1) * this.containerWidth;
@@ -94,7 +103,10 @@ export default {
                 this.maxDistance = (this.childLength - 1) * this.containerHeight;
                 this.thresholdDistance = this.containerHeight * this.threshold;
             }
+        },
 
+        setConfig() {
+            this.setArgsValue();
             if (this.loop) {
                 this.onLoopCopyElement();
                 this.currentNow = 1;
