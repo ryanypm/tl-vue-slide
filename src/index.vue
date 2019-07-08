@@ -193,7 +193,7 @@ export default {
 
         onLoopCopyElement() {
             if (!this.loop) return;
-            const copyNode = document.querySelectorAll('.tl-slide-container .tl-slide-copy-item');
+            const copyNode = this.$el.querySelectorAll('.tl-slide-copy-item');
             if (copyNode && copyNode.length) {
                 for (let i = 0; i < copyNode.length; i++) {
                     this.slideWraper.removeChild(copyNode[i]);
