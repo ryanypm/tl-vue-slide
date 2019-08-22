@@ -14,10 +14,15 @@
 		}
 		.slide {
 			width: 100%;
-			height: 200px;
+			height: 1200px;
 		}
 		.item {
 			background-color: red;
+		}
+
+		.slide2 {
+			width: 100%;
+			height: 50px;
 		}
     </style>
 </head>
@@ -26,11 +31,20 @@
 	<div id="app">
 		<div class="slide">
 			<tl-slide>
-				<tl-slide-item class="item" :key="item" v-for="item in data">
+				<tl-slide-item class="item" :key="item" :style="{backgroundColor: item}" v-for="item in data">
 					{{item}}
 				</tl-slide-item>
 			</tl-slide>
 		</div>
+
+
+		<!-- <div class="slide2">
+			<tl-slide direction="vertical">
+				<tl-slide-item class="item" :key="item" :style="{backgroundColor: item}" v-for="item in data">
+					{{item}}
+				</tl-slide-item>
+			</tl-slide>
+		</div> -->
 	</div>
 </body>
 <script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.js"></script>
@@ -46,19 +60,17 @@
 			}
 		},
 		created() {
-			setTimeout(() => {
-				this.data = [
-					'slide1',
-					'slide2',
-					'slide3',
-					'slide4',
-					'slide5',
-					'slide6',
-				]
-			}, 2000);
-			setTimeout(() => {
-				this.data.push('slide7');
-			}, 3000);
+			this.data = [
+				'red',
+				'green',
+				'yellow',
+				'pink',
+				'purple',
+				'black',
+			]
+			// setTimeout(() => {
+			// 	this.data.push('slide7');
+			// }, 3000);
 		}
 	});
 </script>

@@ -1,6 +1,7 @@
 <template>
     <div class="tl-slide-container" ref="slide" @mouseleave="swipeOut">
         <div class="tl-slide-touch"
+			ref="touch"
             @touchstart="onSwipeStart"
             @touchmove="onSwipeMove"
             @touchend="onSwipeEnd"
@@ -20,6 +21,20 @@
 
 <script>
 import utilsMixin from './utils.mixin';
+
+const isPassive = () => {
+    let supportsPassiveOption = false;
+    try {
+        addEventListener("tl_slide_test_passive", null, Object.defineProperty({}, 'passive', {
+            get: function () {
+                supportsPassiveOption = true;
+            }
+        }));
+    } catch(e) {}
+    return supportsPassiveOption;
+}
+
+const supportsPassiveOption = (passive) => isPassive() ? { passive } : passive;
 
 export default {
     mixins: [utilsMixin],
@@ -52,6 +67,7 @@ export default {
             startValue: 0,
             moveValue: 0,
             slideValue: 0,
+            startOffset: 0,
 
             containerWidth: 0,
             containerHeight: 0,
@@ -64,6 +80,8 @@ export default {
             childLength: 0,
             slideWraper: null,
 			argsValueResetCount: 10,
+
+			disableMove: false,
         };
     },
 
@@ -76,6 +94,7 @@ export default {
     mounted() {
         document.body.addEventListener('touchstart', () => { });
         this.slideWraper = this.$refs.slideWraper;
+		document.body.addEventListener('touchmove', this.onDocumentMove, supportsPassiveOption(false));
     },
 
     methods: {
@@ -130,12 +149,25 @@ export default {
             }, this.autoplay);
         },
 
+		onDocumentMove(e) {
+			if (e.cancelable && this.disableMove) {
+                // 判断默认行为是否已经被禁用
+                if (!e.defaultPrevented) {
+                    e.preventDefault();
+                }
+            }
+		},
+
         onSwipeStart(e) {
             if (this.disableTouch) return;
             if (this.isAnimateIng) return;
             this.isAction = true;
             const offset = this.offset(e);
             this.startValue = this.isHorizontal ? offset.x : offset.y;
+			this.startOffset = offset;
+			if (!this.isHorizontal) {
+				e.preventDefault();
+			}
         },
 
         onSwipeMove(e) {
@@ -144,7 +176,19 @@ export default {
             const offset = this.offset(e);
             let delta = 0;
 
-            if (!this.isHorizontal && Math.abs(offset.y - this.startValue) < 10) return;
+            if (!this.isHorizontal && Math.abs(offset.y - this.startValue) < 10) {
+				return;
+			} else if (this.isHorizontal) {
+				const y = Math.abs(offset.y - this.startOffset.y);
+				const x = Math.abs(offset.x - this.startOffset.x);
+
+				if (y > x) return;
+				if (x > y && !this.disableMove) {
+					this.disableMove = true;	
+				}
+			} else if (!this.isHorizontal) {
+				this.disableMove = true;
+			}
 
             if (this.isHorizontal) {
                 delta = offset.x - this.startValue;
@@ -167,14 +211,26 @@ export default {
         },
 
         onSwipeEnd(e) {
+			this.disableMove = false;
+
             if (this.disableTouch) return;
             if (this.isAnimateIng) return;
             this.isAction = false;
             const offset = this.offset(e);
             const delta = this.slideValue;
-            if (delta === 0
-                || (this.isHorizontal && offset.x === this.startValue)
-                || (!this.isHorizontal && offset.y === this.startValue)) return;
+
+			if (delta === 0) return;
+
+			if (this.isHorizontal) {
+				const y = Math.abs(offset.y - this.startOffset.y);
+				const x = Math.abs(offset.x - this.startOffset.x);
+				if (x < y) {
+					this.action();
+					return;
+				}
+			} else if(offset.y === this.startValue) {
+				return;
+			}
 
             if (delta < 0 && Math.abs(delta) > this.thresholdDistance) {
                 this.next();
@@ -226,9 +282,13 @@ export default {
             this.currentNow++;
             if (this.loop && this.currentNow >= this.childLength) {
                 this.currentNow = this.childLength - 1;
-            } else {
-                this.currentNow %= this.childLength;
             }
+			if (!this.loop && this.currentNow >= this.childLength) {
+				this.currentNow = this.childLength - 1;
+				this.action();
+				return;
+			}
+			this.currentNow %= this.childLength;
             this.action();
         },
 
