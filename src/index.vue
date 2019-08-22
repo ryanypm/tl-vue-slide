@@ -49,7 +49,8 @@ export default {
         return {
             isAction: false,
             isAnimateIng: false,
-            startValue: 0,
+            startValueX: 0,
+            startValueY: 0,
             moveValue: 0,
             slideValue: 0,
 
@@ -135,7 +136,8 @@ export default {
             if (this.isAnimateIng) return;
             this.isAction = true;
             const offset = this.offset(e);
-            this.startValue = this.isHorizontal ? offset.x : offset.y;
+            this.startValueX = offset.x;
+            this.startValueY = offset.y;
         },
 
         onSwipeMove(e) {
@@ -144,12 +146,15 @@ export default {
             const offset = this.offset(e);
             let delta = 0;
 
-            if (!this.isHorizontal && Math.abs(offset.y - this.startValue) < 10) return;
+            if (!this.isHorizontal && Math.abs(offset.y - this.startValueY) < 10) return;
 
             if (this.isHorizontal) {
-                delta = offset.x - this.startValue;
+                if (Math.abs(offset.y - this.startValueY) > 10 || Math.abs(offset.x - this.startValueX) < 50) {
+                    return;
+                }
+                delta = offset.x - this.startValueX;
             } else {
-                delta = offset.y - this.startValue;
+                delta = offset.y - this.startValueY;
             }
 
             let value = this.moveValue + delta;
@@ -173,9 +178,10 @@ export default {
             const offset = this.offset(e);
             const delta = this.slideValue;
             if (delta === 0
-                || (this.isHorizontal && offset.x === this.startValue)
-                || (!this.isHorizontal && offset.y === this.startValue)) return;
-
+                || (this.isHorizontal && (offset.x === this.startValueX
+                                        || Math.abs(offset.y - this.startValueY) > 10 
+                                        || Math.abs(offset.x - this.startValueX) < 50))
+                || (!this.isHorizontal && offset.y === this.startValueY)) return;
             if (delta < 0 && Math.abs(delta) > this.thresholdDistance) {
                 this.next();
             } else if (delta > 0 && delta > this.thresholdDistance) {
