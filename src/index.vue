@@ -75,6 +75,7 @@ export default {
             maxDistance: 0,
             thresholdDistance: 0,
             currentNow: 0,
+			lastNow: 0,
             style: {},
 
             childLength: 0,
@@ -309,6 +310,7 @@ export default {
                 value = -(this.currentNow * this.containerHeight);
             }
             this.slide(value, animate);
+			this.lastNow = this.currentNow;
             this.moveValue = value;
         },
 
@@ -317,15 +319,17 @@ export default {
                 transform: this.isHorizontal ? `translate3d(${delta}px, 0px, 0px)` : `translate3d(0px, ${delta}px, 0px)`,
             };
             if (animate) {
-                body.transition = '300ms';
-                this.isAnimateIng = true;
-                setTimeout(() => {
-                    this.isAnimateIng = false;
-                    this.$emit('slide', this.currentNow);
-                }, 300);
-            } else {
-                this.$emit('slide', this.currentNow);
-            }
+				body.transition = '300ms';
+				if (this.lastNow !== this.currentNow) {
+					this.isAnimateIng = true;
+					setTimeout(() => {
+						this.isAnimateIng = false;
+						this.$emit('slide', this.currentNow);
+					}, 300);
+				}
+            } else if (this.lastNow !== this.currentNow) {
+				this.$emit('slide', this.currentNow);
+			}
             this.style = this.setTransform(body);
         },
 

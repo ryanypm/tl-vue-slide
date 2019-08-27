@@ -29,8 +29,9 @@
 
 <body>
 	<div id="app">
+		<button @click="$refs.slide.slideTo(2, false)">go to</button>
 		<div class="slide">
-			<tl-slide>
+			<tl-slide ref="slide" @slide="onSlide">
 				<tl-slide-item class="item" :key="item" :style="{backgroundColor: item}" v-for="item in data">
 					{{item}}
 				</tl-slide-item>
@@ -57,6 +58,11 @@
 				data: [
 					
 				],
+			}
+		},
+		methods: {
+			onSlide(e) {
+				console.warn(e);
 			}
 		},
 		created() {
