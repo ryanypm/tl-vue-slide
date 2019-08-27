@@ -308,11 +308,15 @@ export default {
             } else {
                 value = -(this.currentNow * this.containerHeight);
             }
-            this.slide(value, animate);
+            this.slide(value, animate, {
+                isEnd: true,
+            });
             this.moveValue = value;
         },
 
-        slide(delta, animate) {
+        slide(delta, animate, opt = {
+            isEnd: false,
+        }) {
             const body = {
                 transform: this.isHorizontal ? `translate3d(${delta}px, 0px, 0px)` : `translate3d(0px, ${delta}px, 0px)`,
             };
@@ -322,9 +326,15 @@ export default {
                 setTimeout(() => {
                     this.isAnimateIng = false;
                     this.$emit('slide', this.currentNow);
+                    if (opt.isEnd) {
+                        this.$emit('slideEnd', this.currentNow);
+                    }
                 }, 300);
             } else {
                 this.$emit('slide', this.currentNow);
+                if (opt.isEnd) {
+                    this.$emit('slideEnd', this.currentNow);
+                }
             }
             this.style = this.setTransform(body);
         },
