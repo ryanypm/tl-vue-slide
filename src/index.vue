@@ -166,6 +166,7 @@ export default {
             const offset = this.offset(e);
             this.startValue = this.isHorizontal ? offset.x : offset.y;
 			this.startOffset = offset;
+			this.slideValue = 0;
 			if (!this.isHorizontal) {
 				e.preventDefault();
 			}
